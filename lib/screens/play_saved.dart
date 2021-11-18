@@ -235,7 +235,8 @@ class _PlaySavedState extends State<PlaySaved> with WidgetsBindingObserver {
                       SliverFixedExtentList(
                           delegate:
                               SliverChildBuilderDelegate((context, index) {
-                            final episode = episodes[index + 1];
+                            int length = episodes.length;
+                            final episode = episodes[length - index - 1];
                             return Padding(
                               padding: const EdgeInsets.fromLTRB(20, 2, 20, 5),
                               child: Slidable(
