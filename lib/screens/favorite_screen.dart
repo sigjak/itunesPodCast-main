@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:itunes_pod/screens/play_saved.dart';
@@ -107,10 +107,24 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     var pod = context.watch<PodcastServices>();
 
     return Scaffold(
+      drawer: const Drawer(),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             actions: [
+              // TextButton(
+              //     onPressed: () async {
+              //       String baseDir =
+              //           await context.read<SaveService>().getSdPath();
+              //       String path = '$baseDir/Podcasts';
+              //       Directory dir = Directory(path);
+              //       dir.list(recursive: false).forEach((element) {
+              //         element.deleteSync(recursive: true);
+              //       });
+              //       await context.read<PodcastServices>().deleteDB();
+              //       SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+              //     },
+              //     child: const Text('DeleteEverything')),
               TextButton(
                   onPressed: clearCache,
                   child: const Text(
@@ -118,7 +132,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                     style: TextStyle(
                       color: Colors.white,
                     ),
-                  ))
+                  )),
             ],
             snap: true,
             floating: true,
@@ -262,4 +276,82 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       //),
     );
   }
+}
+
+class Drawer extends StatelessWidget {
+  const Drawer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Stack(
+          children: [
+            Container(
+              height: 400,
+              width: 200,
+              color: Colors.black54,
+              child: const Image(
+                image: AssetImage('assets/images/gos2.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            Positioned(
+              left: 20,
+              top: 150,
+              child: ElevatedButton(
+                onPressed: () async {
+                  await deleteAll(context);
+                  Navigator.of(context).pop();
+                },
+                child: const Text('DeleteEverything'),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+Future<void> deleteAll(context) async {
+  return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Are you sure ?'),
+          content: SingleChildScrollView(
+            child: ListBody(children: const [
+              Text('This can\'t be undone !!'),
+              Text(
+                'Database and saved episodes will be deleted.',
+                style: TextStyle(fontSize: 12),
+              )
+            ]),
+          ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Cancel')),
+            TextButton(
+                onPressed: () async {
+                  String baseDir =
+                      await context.read<SaveService>().getSdPath();
+                  String path = '$baseDir/Podcasts';
+                  Directory dir = Directory(path);
+                  dir.list(recursive: false).forEach((element) {
+                    element.deleteSync(recursive: true);
+                  });
+                  await context.read<PodcastServices>().deleteDB();
+                  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                },
+                child: const Text(
+                  'Delete',
+                  style: TextStyle(color: Colors.red),
+                ))
+          ],
+        );
+      });
 }
