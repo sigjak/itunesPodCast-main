@@ -240,100 +240,96 @@ class _AudioScreenState extends State<AudioScreen> with WidgetsBindingObserver {
                         },
                       ),
                     ),
-                    SliverFixedExtentList(
-                        delegate: SliverChildBuilderDelegate((context, index) {
-                          final episode = episodes[index + 1];
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 2, 20, 5),
-                            child: Slidable(
-                              actionPane: const SlidableDrawerActionPane(),
-                              actionExtentRatio: 0.25,
-                              child: Container(
-                                height: 100,
-                                padding:
-                                    const EdgeInsets.fromLTRB(16, 16, 16, 4),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 1,
-                                    color: tappedIndex == index
-                                        ? Colors.white
-                                        : Colors.grey,
-                                  ),
-                                ),
-                                child: SingleChildScrollView(
-                                  child: Column(children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          isSelected = true;
-                                          tappedIndex = index;
-                                          episodeName = episode.trackName!;
-                                        });
-                                        _scrollController.animateTo(0,
-                                            duration:
-                                                const Duration(seconds: 2),
-                                            curve: Curves.easeInOutCirc);
-
-                                        _init(episode);
-                                      },
-                                      child: Column(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 12),
-                                            child: Text(episode.trackName!),
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                dateToString(
-                                                    episode.releaseDate ??
-                                                        DateTime.now()),
-                                                style: const TextStyle(
-                                                    fontSize: 9),
-                                              ),
-                                              Text(
-                                                totime(
-                                                    episode.trackTimeMillis ??
-                                                        0),
-                                                style: const TextStyle(
-                                                    fontSize: 9),
-                                              )
-                                            ],
-                                          ),
-                                          Text(
-                                            episode.description ?? '',
-                                            style:
-                                                const TextStyle(fontSize: 10),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ]),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final episode = episodes[index + 1];
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 2, 20, 5),
+                          child: Slidable(
+                            actionPane: const SlidableDrawerActionPane(),
+                            actionExtentRatio: 0.25,
+                            child: Container(
+                              constraints: const BoxConstraints(maxHeight: 175),
+                              padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 1,
+                                  color: tappedIndex == index
+                                      ? Colors.white
+                                      : Colors.grey,
                                 ),
                               ),
-                              actions: [
-                                IconSlideAction(
-                                  caption: 'Save episode',
-                                  icon: Icons.download,
-                                  color: Colors.grey[800],
-                                  onTap: () async {
-                                    showDloadIndicator(context, episode);
+                              child: SingleChildScrollView(
+                                child: Column(children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        isSelected = true;
+                                        tappedIndex = index;
+                                        episodeName = episode.trackName!;
+                                      });
+                                      _scrollController.animateTo(0,
+                                          duration: const Duration(seconds: 2),
+                                          curve: Curves.easeInOutCirc);
 
-                                    await saveEpisode(episode);
-                                    Navigator.pop(context);
-                                    // ScaffoldMessenger.of(context).showSnackBar(
-                                    //     snack(Icons.check,
-                                    //         'Episode downloaded!'));
-                                  },
-                                )
-                              ],
+                                      _init(episode);
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 12),
+                                          child: Text(episode.trackName!),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              dateToString(
+                                                  episode.releaseDate ??
+                                                      DateTime.now()),
+                                              style:
+                                                  const TextStyle(fontSize: 9),
+                                            ),
+                                            Text(
+                                              totime(
+                                                  episode.trackTimeMillis ?? 0),
+                                              style:
+                                                  const TextStyle(fontSize: 9),
+                                            )
+                                          ],
+                                        ),
+                                        Text(
+                                          episode.description ?? '',
+                                          style: const TextStyle(fontSize: 12),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ]),
+                              ),
                             ),
-                          );
-                        }, childCount: episodes.length - 1),
-                        itemExtent: 100)
+                            actions: [
+                              IconSlideAction(
+                                caption: 'Save episode',
+                                icon: Icons.download,
+                                color: Colors.grey[800],
+                                onTap: () async {
+                                  showDloadIndicator(context, episode);
+
+                                  await saveEpisode(episode);
+                                  Navigator.pop(context);
+                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                  //     snack(Icons.check,
+                                  //         'Episode downloaded!'));
+                                },
+                              )
+                            ],
+                          ),
+                        );
+                      }, childCount: episodes.length - 1),
+                    )
                   ],
                 ),
               )

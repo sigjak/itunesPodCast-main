@@ -232,113 +232,111 @@ class _PlaySavedState extends State<PlaySaved> with WidgetsBindingObserver {
                           },
                         ),
                       ),
-                      SliverFixedExtentList(
-                          delegate:
-                              SliverChildBuilderDelegate((context, index) {
-                            int length = episodes.length;
-                            final episode = episodes[length - index - 1];
-                            return Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 2, 20, 5),
-                              child: Slidable(
-                                actionPane: const SlidableDrawerActionPane(),
-                                actionExtentRatio: 0.25,
-                                child: Container(
-                                  height: 100,
-                                  padding:
-                                      const EdgeInsets.fromLTRB(16, 16, 16, 4),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 1,
-                                      color: tappedIndex == index
-                                          ? Colors.white
-                                          : Colors.grey,
-                                    ),
-                                  ),
-                                  child: SingleChildScrollView(
-                                    child: Column(children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            isSelected = true;
-                                            tappedIndex = index;
-                                            episodeName = episode.trackName!;
-                                          });
-                                          _scrollController.animateTo(0,
-                                              duration:
-                                                  const Duration(seconds: 2),
-                                              curve: Curves.easeInOutCirc);
-
-                                          _init(episode);
-                                        },
-                                        child: Column(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 12),
-                                              child:
-                                                  Text(episode.trackName ?? ''),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  dateToString(
-                                                      episode.releaseDate ??
-                                                          DateTime.now()),
-                                                  style: const TextStyle(
-                                                      fontSize: 9),
-                                                ),
-                                                Text(
-                                                  totime(
-                                                      episode.trackTimeMillis ??
-                                                          0),
-                                                  style: const TextStyle(
-                                                      fontSize: 9),
-                                                )
-                                              ],
-                                            ),
-                                            Text(
-                                              episode.description ?? '',
-                                              style:
-                                                  const TextStyle(fontSize: 10),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ]),
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          int length = episodes.length;
+                          final episode = episodes[length - index - 1];
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 2, 20, 5),
+                            child: Slidable(
+                              actionPane: const SlidableDrawerActionPane(),
+                              actionExtentRatio: 0.25,
+                              child: Container(
+                                constraints:
+                                    const BoxConstraints(maxHeight: 175),
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 1,
+                                    color: tappedIndex == index
+                                        ? Colors.white
+                                        : Colors.grey,
                                   ),
                                 ),
-                                actions: [
-                                  IconSlideAction(
-                                    caption: 'Delete episode',
-                                    iconWidget: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
-                                    ),
-                                    color: Colors.grey[800],
-                                    onTap: () async {
-                                      File targetFile =
-                                          File(episode.episodeUrl!);
-                                      if (targetFile.existsSync()) {
-                                        targetFile.deleteSync(recursive: true);
-                                      }
+                                child: SingleChildScrollView(
+                                  child: Column(children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          isSelected = true;
+                                          tappedIndex = index;
+                                          episodeName = episode.trackName!;
+                                        });
+                                        _scrollController.animateTo(0,
+                                            duration:
+                                                const Duration(seconds: 2),
+                                            curve: Curves.easeInOutCirc);
 
-                                      await podsql.deleteSavedEpisode(
-                                          episode.episodeUrl!);
-                                      if (savedEpisodes.length > 1) {
-                                        await getSavedData();
-                                      } else {
-                                        Navigator.of(context).pop();
-                                      }
-                                    },
-                                  )
-                                ],
+                                        _init(episode);
+                                      },
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 12),
+                                            child:
+                                                Text(episode.trackName ?? ''),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                dateToString(
+                                                    episode.releaseDate ??
+                                                        DateTime.now()),
+                                                style: const TextStyle(
+                                                    fontSize: 9),
+                                              ),
+                                              Text(
+                                                totime(
+                                                    episode.trackTimeMillis ??
+                                                        0),
+                                                style: const TextStyle(
+                                                    fontSize: 9),
+                                              )
+                                            ],
+                                          ),
+                                          Text(
+                                            episode.description ?? '',
+                                            style:
+                                                const TextStyle(fontSize: 10),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ]),
+                                ),
                               ),
-                            );
-                          }, childCount: episodes.length - 1),
-                          itemExtent: 100)
+                              actions: [
+                                IconSlideAction(
+                                  caption: 'Delete episode',
+                                  iconWidget: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                  color: Colors.grey[800],
+                                  onTap: () async {
+                                    File targetFile = File(episode.episodeUrl!);
+                                    if (targetFile.existsSync()) {
+                                      targetFile.deleteSync(recursive: true);
+                                    }
+
+                                    await podsql.deleteSavedEpisode(
+                                        episode.episodeUrl!);
+                                    if (savedEpisodes.length > 1) {
+                                      await getSavedData();
+                                    } else {
+                                      Navigator.of(context).pop();
+                                    }
+                                  },
+                                )
+                              ],
+                            ),
+                          );
+                        }, childCount: episodes.length - 1),
+                      )
                     ],
                   ),
                 )
