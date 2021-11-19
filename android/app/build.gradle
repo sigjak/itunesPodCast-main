@@ -46,6 +46,7 @@ android {
         applicationId "com.example.itunes_pod"
         minSdkVersion 24
         targetSdkVersion 31
+
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

@@ -297,8 +297,8 @@ class Drawer extends StatelessWidget {
               ),
             ),
             Positioned(
-              left: 20,
-              top: 150,
+              left: 50,
+              top: 300,
               child: ElevatedButton(
                 onPressed: () async {
                   await deleteAll(context);

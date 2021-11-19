@@ -219,7 +219,7 @@ class _TrendScreenState extends State<TrendScreen> {
                   child: isDescription
                       ? Container(
                           padding: const EdgeInsets.all(8),
-                          constraints: const BoxConstraints(maxHeight: 150),
+                          constraints: const BoxConstraints(maxHeight: 175),
                           child: Card(
                             child: SingleChildScrollView(
                               padding: const EdgeInsets.all(12),
