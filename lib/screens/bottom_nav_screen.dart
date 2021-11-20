@@ -40,10 +40,47 @@ class _BottomNavState extends State<BottomNav> {
           FloatingActionButtonLocation.miniCenterFloat,
       floatingActionButton: FloatingActionButton.small(
         onPressed: () {
-          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+          showExitAlert(context);
+          // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
         },
         child: const Icon(Icons.exit_to_app),
       ),
     );
   }
+}
+
+showExitAlert(BuildContext context) {
+  // Widget okButton = TextButton(
+  //   onPressed: () {
+  //     Navigator.of(context).pop();
+  //   },
+  //   child: Text('OK'),
+  // );
+  // AlertDialog exitAlert = AlertDialog(
+  //   title: Text('Exit app?'),
+
+  //   actions: [okButton],
+  // );
+  showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Exit app?'),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('No')),
+            TextButton(
+                onPressed: () {
+                  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                },
+                child: const Text(
+                  'Yes',
+                  style: TextStyle(color: Colors.red),
+                ))
+          ],
+        );
+      });
 }
