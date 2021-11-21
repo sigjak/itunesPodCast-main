@@ -223,16 +223,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                       trailing: IconButton(
                                         onPressed: () {
                                           _showDeleteAlert(podcast);
-                                          //   String path = await context
-                                          //       .read<SaveService>()
-                                          //       .getDirPath(podcast.podcastName);
-                                          //   final dir = Directory(path);
-                                          //   dir.deleteSync(recursive: true);
-
-                                          //   await context
-                                          //       .read<PodcastServices>()
-                                          //       .deleteSinglePodcast(
-                                          //           podcast.podcastName);
                                         },
                                         icon: const Icon(
                                           Icons.delete,

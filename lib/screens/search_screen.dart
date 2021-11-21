@@ -147,43 +147,61 @@ class _SearchScreenState extends State<SearchScreen> {
                           body: podcast.description.isNotEmpty
                               ? ListTile(
                                   title: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(20, 4, 0, 10),
-                                    child: Container(
-                                      constraints:
-                                          const BoxConstraints(maxHeight: 120),
-                                      child: SingleChildScrollView(
-                                        child: Text(
-                                          podcast.description,
-                                          style: const TextStyle(fontSize: 10),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 4, 10, 10),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => AudioScreen(
+                                              itunesId: podcast.collectionId
+                                                  .toString(),
+                                            ),
+                                          ),
+                                        );
+                                        _scrollController.animateTo(0,
+                                            duration:
+                                                const Duration(seconds: 2),
+                                            curve: Curves.easeInOutCirc);
+                                      },
+                                      child: Container(
+                                        constraints: const BoxConstraints(
+                                            maxHeight: 120),
+                                        child: SingleChildScrollView(
+                                          child: Text(
+                                            podcast.description,
+                                            style:
+                                                const TextStyle(fontSize: 10),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                  trailing: IconButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => AudioScreen(
-                                            itunesId:
-                                                podcast.collectionId.toString(),
-                                          ),
-                                        ),
-                                      );
-                                      _scrollController.animateTo(0,
-                                          duration: const Duration(seconds: 2),
-                                          curve: Curves.easeInOutCirc);
-                                      // setState(() {
-                                      //   playerPlaying = playResult;
-                                      // });
-                                    },
-                                    icon: const Icon(
-                                      Icons.podcasts,
-                                      color: Colors.amber,
-                                      size: 32,
-                                    ),
-                                  ),
+                                  // trailing: IconButton(
+                                  //   onPressed: () {
+                                  //     Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //         builder: (context) => AudioScreen(
+                                  //           itunesId:
+                                  //               podcast.collectionId.toString(),
+                                  //         ),
+                                  //       ),
+                                  //     );
+                                  //     _scrollController.animateTo(0,
+                                  //         duration: const Duration(seconds: 2),
+                                  //         curve: Curves.easeInOutCirc);
+                                  //     // setState(() {
+                                  //     //   playerPlaying = playResult;
+                                  //     // });
+                                  //   },
+                                  //   icon: const Icon(
+                                  //     Icons.podcasts,
+                                  //     color: Colors.amber,
+                                  //     size: 32,
+                                  //   ),
+                                  // ),
                                 )
                               : const CircularProgressIndicator(),
                         );
